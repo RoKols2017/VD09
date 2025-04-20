@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Deploy{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Деплой Flask на PythonAnywhere</h1>
+
+    <h3>1. Зарегистрируйся / Войди</h3>
+    <p>Перейди на <a href="https://www.pythonanywhere.com/" target="_blank">pythonanywhere.com</a></p>
+
+    <h3>2. Залей файлы</h3>
+    <ul>
+        <li>Создай папку <code>/home/yourusername/myflaskapp/</code></li>
+        <li>Загрузи туда <code>app/</code>, <code>run.py</code>, <code>templates/</code> и <code>static/</code></li>
+    </ul>
+    <pre><code>git clone https://github.com/yourname/your-flask-repo.git</code></pre>
+
+    <h3>3. Виртуальное окружение</h3>
+    <pre><code>
+cd ~/myflaskapp
+python3.10 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+    </code></pre>
+
+    <h3>4. Настройка веб-приложения</h3>
+    <ul>
+        <li>В разделе <strong>Web</strong> нажми <strong>Add a new web app</strong></li>
+        <li>Выбери: <em>Manual configuration</em> → Python 3.13</li>
+        <li>Укажи путь к WSGI: <code>/var/www/yourusername_pythonanywhere_com_wsgi.py</code></li>
+    </ul>
+
+    <h3>5. WSGI конфигурация</h3>
+    <pre><code>
+import sys, os
+path = '/home/yourusername/myflaskapp'
+if path not in sys.path: sys.path.append(path)
+
+activate_this = '/home/yourusername/myflaskapp/venv/bin/activate_this.py'
+with open(activate_this) as f: exec(f.read(), dict(__file__=activate_this))
+
+from app import app as application
+    </code></pre>
+
+    <h3>6. Перезапуск</h3>
+    <p>Нажми <strong>Reload</strong> в панели Web</p>
+    <p>Открой сайт: <code>https://yourusername.pythonanywhere.com</code></p>
+
+    <hr>
+    <p class="text-success">✅ Готово! Удачи!</p>
+</div>
+{% endblock %}
